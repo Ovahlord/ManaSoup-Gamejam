@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,22 +7,25 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerCharacterController : MonoBehaviour
 {
+    // Exposed Settings
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float bodyTurnSpeed = 720f;
     [SerializeField] private float cameraFollowLerpFactor = 5.0f;
     [SerializeField] private float cameraDistance = 10f;
     [SerializeField] private float cameraFacingHeightOffset = 1f;
-    [SerializeField] private List<GameObject> splittingCharacters = new List<GameObject>();
+    [SerializeField] private List<GameObject> splittingCharacterPrefabs = new List<GameObject>();
 
-    private CharacterController characterController = null;
+
+    private CharacterController activePlayerCharacterController = null;
     private Vector2 moveInputValue = Vector2.zero;
     private Vector3 motion = Vector3.zero;
     private float targetBodyRotation = 0f;
     private List<GameObject> splittedCharacters = new List<GameObject>();
+    private int controlledSplittedCharacterIndex = 0;
 
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
+        activePlayerCharacterController = GetComponent<CharacterController>();
         new GameObject("CameraFollower").AddComponent<PlayerCameraFollower>();
 
         PlayerCameraFollower.Target = transform;
@@ -39,19 +43,17 @@ public class PlayerCharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Quaternion.Euler(0f, Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetBodyRotation, bodyTurnSpeed * Time.deltaTime), 0f);
+        activePlayerCharacterController.transform.rotation = Quaternion.Euler(0f, Mathf.MoveTowardsAngle(activePlayerCharacterController.transform.eulerAngles.y, targetBodyRotation, bodyTurnSpeed * Time.deltaTime), 0f);
 
         if (moveInputValue.magnitude == 0f)
             return;
 
         motion = new Vector3(moveInputValue.x, -1f, moveInputValue.y) * (Time.deltaTime * moveSpeed);
-        characterController.Move(motion);
+        activePlayerCharacterController.Move(motion);
     }
 
     public void OnMove(InputValue value)
     {
-        Debug.Log("OnMove has been invoked :)");
-
         moveInputValue = value.Get<Vector2>();
         if (moveInputValue.magnitude != 0f)
             targetBodyRotation = Mathf.Atan2(moveInputValue.x, moveInputValue.y) * Mathf.Rad2Deg;
@@ -59,23 +61,34 @@ public class PlayerCharacterController : MonoBehaviour
 
     public void OnSplit(InputValue value)
     {
-        Debug.Log("splitting...");
-
-        // We already have active splitted characters. Destroy them...
-        if (splittedCharacters.Count > 0)
-        {
-            foreach (GameObject character in splittedCharacters)
-                Destroy(character);
+        if (splittingCharacterPrefabs.Count == 0)
             return;
-        }
 
-        //... otherwise spawn new
-        foreach (GameObject splittingCharacter in splittingCharacters)
-            SpawnCharacter(splittingCharacter);
+        if (splittedCharacters.Count == 0)
+        {
+            for (int i = 0; i < splittingCharacterPrefabs.Count; ++i)
+                splittedCharacters.Add(Instantiate(splittingCharacterPrefabs[i], transform.position + (i % 2 != 0 ? (Vector3.left * 1.2f) : (Vector3.right * 1.2f)), transform.rotation, null));
+
+            controlledSplittedCharacterIndex = 0;
+            activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
+            PlayerCameraFollower.Target = activePlayerCharacterController.transform;
+        }
+        else
+        {
+            activePlayerCharacterController = GetComponent<CharacterController>();
+            PlayerCameraFollower.Target = transform;
+
+            foreach (var splittedCharacter in splittedCharacters)
+                Destroy(splittedCharacter);
+
+            splittedCharacters.Clear();
+        }
     }
 
-    private void SpawnCharacter(GameObject character)
+    public void OnSwitchCharacter(InputValue value)
     {
-
+        controlledSplittedCharacterIndex = (controlledSplittedCharacterIndex + 1) % splittedCharacters.Count;
+        activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
+        PlayerCameraFollower.Target = activePlayerCharacterController.transform;
     }
 }
