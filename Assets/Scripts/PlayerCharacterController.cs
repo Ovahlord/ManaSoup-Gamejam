@@ -27,6 +27,7 @@ public class PlayerCharacterController : MonoBehaviour
     private int controlledSplittedCharacterIndex = 0;
     private float? verticalAcceleration = null;
     private Transform grabbedObject = null;
+    private Vector3 previousPosition = Vector3.zero;
 
     static PlayerCharacterController instance = null;
 
@@ -45,6 +46,7 @@ public class PlayerCharacterController : MonoBehaviour
         if (instance != null)
             Destroy(instance.gameObject);
 
+        previousPosition = transform.position;
         instance = this;
     }
 
@@ -78,6 +80,11 @@ public class PlayerCharacterController : MonoBehaviour
         else if (!verticalAcceleration.HasValue)
             verticalAcceleration = 0f;
 
+    }
+
+    private void LateUpdate()
+    {
+        previousPosition = transform.position;
     }
 
     public void OnMove(InputValue value)
@@ -191,5 +198,6 @@ public class PlayerCharacterController : MonoBehaviour
 
         instance.grabbedObject.SetParent(null);
         instance.grabbedObject = null;
+        instance.transform.position = instance.previousPosition;
     }
 }
