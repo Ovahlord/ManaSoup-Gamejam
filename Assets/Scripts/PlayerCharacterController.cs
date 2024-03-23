@@ -28,10 +28,12 @@ public class PlayerCharacterController : MonoBehaviour
     private List<GameObject> splittedCharacters = new List<GameObject>();
     private int controlledSplittedCharacterIndex = 0;
     private float? verticalAcceleration = null;
+
+    // Grabbing
     private Transform grabbedObject = null;
     private Vector3 previousPosition = Vector3.zero;
-
-    static PlayerCharacterController instance = null;
+    private Vector3 previousGrabObjectPosition = Vector3.zero;
+    private Collider[] colliderCache = new Collider[20];
 
     private readonly Vector3[] splittingRaycastDirections = { Vector3.left, Vector3.right, Vector3.forward, Vector3.back, new(1f, 0f, 1f), new(-1f, 0f, -1f), new(1f, 0f, -1f), new(-1f, 0f, 1f) };
 
@@ -45,11 +47,7 @@ public class PlayerCharacterController : MonoBehaviour
         PlayerCameraFollower.FollowLerpFactor = cameraFollowLerpFactor;
         PlayerCameraFollower.CameraFacingHeightOffset = cameraFacingHeightOffset;
 
-        if (instance != null)
-            Destroy(instance.gameObject);
-
         previousPosition = transform.position;
-        instance = this;
     }
 
     // Start is called before the first frame update
@@ -82,11 +80,14 @@ public class PlayerCharacterController : MonoBehaviour
         else if (!verticalAcceleration.HasValue)
             verticalAcceleration = 0f;
 
+        UpdateGrabCollision();
     }
 
     private void LateUpdate()
     {
         previousPosition = transform.position;
+        if (grabbedObject != null)
+            previousGrabObjectPosition = grabbedObject.position;
     }
 
     public void OnMove(InputValue value)
@@ -126,6 +127,16 @@ public class PlayerCharacterController : MonoBehaviour
 
             if (splittedCharacters.Count == 0)
                 return;
+
+            foreach (GameObject splittedCharacter in splittedCharacters)
+            {
+                if (Physics.Raycast(splittedCharacter.transform.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 10f))
+                {
+                    splittedCharacter.transform.position = hit.point;
+                    if (hit.transform.CompareTag("MovableObject"))
+                        splittedCharacter.transform.SetParent(hit.transform);
+                }
+            }
 
             controlledSplittedCharacterIndex = 0;
             activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
@@ -189,6 +200,7 @@ public class PlayerCharacterController : MonoBehaviour
                 {
                     hitInfo.transform.SetParent(activePlayerCharacterController.transform);
                     grabbedObject = hitInfo.transform;
+                    previousGrabObjectPosition = grabbedObject.position;
                 }
             }
         }
@@ -196,13 +208,36 @@ public class PlayerCharacterController : MonoBehaviour
             ReleaseGrabbedObject();
     }
 
-    public static void ReleaseGrabbedObject()
+    public void ReleaseGrabbedObject()
     {
-        if (instance.grabbedObject == null)
+        if (grabbedObject == null)
             return;
 
-        instance.grabbedObject.SetParent(null);
-        instance.grabbedObject = null;
-        instance.transform.position = instance.previousPosition;
+        transform.position = previousPosition;
+        grabbedObject.position = previousGrabObjectPosition;
+        grabbedObject.SetParent(null);
+        grabbedObject = null;
+    }
+
+    private void UpdateGrabCollision()
+    {
+        if (grabbedObject == null)
+            return;
+
+        int collisionCount = Physics.OverlapBoxNonAlloc(grabbedObject.position, grabbedObject.localScale / 2, colliderCache, grabbedObject.rotation);
+        if (collisionCount == 0)
+            return;
+
+        for (int i = 0; i < collisionCount; ++i)
+        {
+            Collider collider = colliderCache[i];
+            if (collider.transform == activePlayerCharacterController.transform 
+                || collider.transform == grabbedObject.transform
+                || collider.transform.IsChildOf(activePlayerCharacterController.transform))
+                continue;
+
+            ReleaseGrabbedObject();
+            break;
+        }
     }
 }
