@@ -43,14 +43,19 @@ public class PlayerCharacterController : MonoBehaviour
 
     // Pickups
     private int gatheredPickups = 0;
-    public int GatheredPickups 
+    public static int GatheredPickups 
     {
-        get { return gatheredPickups; }
-        set
+        get { return instance.gatheredPickups; }
+        private set
         {
-            gatheredPickups = value;
-            PlayerHUDManager.SetPickupValues(requiredPickups, value);
+            instance.gatheredPickups = value;
+            PlayerHUDManager.SetPickupValues(instance.requiredPickups, value);
         }
+    }
+
+    public static int RequiredPickups
+    {
+        get { return instance.requiredPickups; }
     }
 
     private readonly Vector3[] splittingRaycastDirections = { Vector3.left, Vector3.right, Vector3.forward, Vector3.back, new(1f, 0f, 1f), new(-1f, 0f, -1f), new(1f, 0f, -1f), new(-1f, 0f, 1f) };
@@ -222,11 +227,10 @@ public class PlayerCharacterController : MonoBehaviour
 
         if (grabbedObject == null)
         {
-            if (Physics.Raycast(activePlayerCharacterController.transform.position + Vector3.up * 0.2f, activePlayerCharacterController.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo, 0.6f))
+            if (Physics.Raycast(activePlayerCharacterController.transform.position + Vector3.up * 0.4f, activePlayerCharacterController.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo, 0.6f))
             {
                 if (hitInfo.transform.CompareTag("MovableObject"))
                 {
-                    Debug.Log("grabby grap");
                     hitInfo.transform.SetParent(activePlayerCharacterController.transform);
                     grabbedObject = hitInfo.transform;
                     previousGrabObjectPosition = grabbedObject.position;
@@ -263,7 +267,8 @@ public class PlayerCharacterController : MonoBehaviour
             Collider collider = colliderCache[i];
             if (collider.transform == activePlayerCharacterController.transform 
                 || collider.transform == grabbedObject.transform
-                || collider.transform.IsChildOf(activePlayerCharacterController.transform))
+                || collider.transform.IsChildOf(activePlayerCharacterController.transform)
+                || collider.isTrigger)
                 continue;
 
             ReleaseGrabbedObject();
@@ -296,6 +301,6 @@ public class PlayerCharacterController : MonoBehaviour
 
     public static void IncrementPickupNumber()
     {
-        ++instance.GatheredPickups;
+        ++GatheredPickups;
     }
 }
