@@ -15,7 +15,8 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private float cameraFacingHeightOffset = 1f;
     [SerializeField] private List<GameObject> splittingCharacterPrefabs = new List<GameObject>();
     [SerializeField] private GameObject playerHudPrefab = null;
-    [SerializeField] private ParticleSystem splitChannelParticleSystem = null;
+    [SerializeField] private int requiredPickups = 3;
+    [SerializeField] private Material mainCharacterMaterial = null;
 
     [Header("Jump Character Settings")]
     [SerializeField] private float MaxJumpHeight = 5f;
@@ -40,6 +41,17 @@ public class PlayerCharacterController : MonoBehaviour
     // Amplified Jumping
     private bool amplifiedJump = false;
 
+    // Pickups
+    private int gatheredPickups = 0;
+    public int GatheredPickups 
+    {
+        get { return gatheredPickups; }
+        set
+        {
+            gatheredPickups = value;
+            PlayerHUDManager.SetPickupValues(requiredPickups, value);
+        }
+    }
 
     private readonly Vector3[] splittingRaycastDirections = { Vector3.left, Vector3.right, Vector3.forward, Vector3.back, new(1f, 0f, 1f), new(-1f, 0f, -1f), new(1f, 0f, -1f), new(-1f, 0f, 1f) };
 
@@ -55,7 +67,7 @@ public class PlayerCharacterController : MonoBehaviour
 
         previousPosition = activePlayerCharacterController.transform.position;
         if (instance != null && instance != this)
-            Destroy(instance.gameObject);
+            Destroy(instance);
 
         instance = this;
     }
@@ -64,6 +76,7 @@ public class PlayerCharacterController : MonoBehaviour
     void Start()
     {
         Instantiate(playerHudPrefab);
+        PlayerHUDManager.SetPickupValues(requiredPickups, GatheredPickups);
     }
 
     // Update is called once per frame
@@ -155,7 +168,7 @@ public class PlayerCharacterController : MonoBehaviour
             activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
             PlayerCameraFollower.Target = activePlayerCharacterController.transform;
 
-            splitChannelParticleSystem.Play();
+            mainCharacterMaterial.SetFloat("_TransparencyModifier", 0.2f);
         }
         else
         {
@@ -168,7 +181,7 @@ public class PlayerCharacterController : MonoBehaviour
                 Destroy(splittedCharacter);
 
             splittedCharacters.Clear();
-            splitChannelParticleSystem.Stop();
+            mainCharacterMaterial.SetFloat("_TransparencyModifier", 1.0f);
         }
     }
 
@@ -258,6 +271,13 @@ public class PlayerCharacterController : MonoBehaviour
         }
     }
 
+    private void UpdatePositionSnapshots()
+    {
+        previousPosition = activePlayerCharacterController.transform.position;
+        if (grabbedObject != null)
+            previousGrabObjectPosition = grabbedObject.position;
+    }
+
     public static void ToggleAmplifiedJumping(bool enable)
     {
         if (instance.amplifiedJump == enable || !instance.activePlayerCharacterController.transform.CompareTag("PlayerJump"))
@@ -274,10 +294,8 @@ public class PlayerCharacterController : MonoBehaviour
 
     }
 
-    private void UpdatePositionSnapshots()
+    public static void IncrementPickupNumber()
     {
-        previousPosition = activePlayerCharacterController.transform.position;
-        if (grabbedObject != null)
-            previousGrabObjectPosition = grabbedObject.position;
+        ++instance.GatheredPickups;
     }
 }
