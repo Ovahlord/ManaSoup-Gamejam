@@ -14,6 +14,8 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private float cameraDistance = 10f;
     [SerializeField] private float cameraFacingHeightOffset = 1f;
     [SerializeField] private List<GameObject> splittingCharacterPrefabs = new List<GameObject>();
+    [SerializeField] private GameObject playerHudPrefab = null;
+    [SerializeField] private ParticleSystem splitChannelParticleSystem = null;
 
     [Header("Jump Character Settings")]
     [SerializeField] private float MaxJumpHeight = 5f;
@@ -53,7 +55,7 @@ public class PlayerCharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Instantiate(playerHudPrefab);
     }
 
     // Update is called once per frame
@@ -128,6 +130,8 @@ public class PlayerCharacterController : MonoBehaviour
             controlledSplittedCharacterIndex = 0;
             activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
             PlayerCameraFollower.Target = activePlayerCharacterController.transform;
+
+            splitChannelParticleSystem.Play();
         }
         else
         {
@@ -140,6 +144,7 @@ public class PlayerCharacterController : MonoBehaviour
                 Destroy(splittedCharacter);
 
             splittedCharacters.Clear();
+            splitChannelParticleSystem.Stop();
         }
     }
 
