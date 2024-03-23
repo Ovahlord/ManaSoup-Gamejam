@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerCameraFollower : MonoBehaviour
 {
-
     private float followLerpFactor = 5.0f;
     private float cameraDistance = 10f;
     private float cameraHeightFacingOffset = 1f;
@@ -25,7 +24,7 @@ public class PlayerCameraFollower : MonoBehaviour
         instance = this;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (Target == null)
             return;
