@@ -14,7 +14,7 @@ public class MovableObjectHandler : MonoBehaviour
         previousPosition = transform.position;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (transform.parent == null || !transform.parent.CompareTag("PlayerGrab"))
             return;

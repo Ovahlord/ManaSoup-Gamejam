@@ -144,6 +144,9 @@ public class PlayerCharacterController : MonoBehaviour
 
         ReleaseGrabbedObject();
 
+        if (splittedCharacters.Count == 0)
+            return;
+
         controlledSplittedCharacterIndex = (controlledSplittedCharacterIndex + 1) % splittedCharacters.Count;
         activePlayerCharacterController = splittedCharacters[controlledSplittedCharacterIndex].transform.GetComponent<CharacterController>();
         PlayerCameraFollower.Target = activePlayerCharacterController.transform;
