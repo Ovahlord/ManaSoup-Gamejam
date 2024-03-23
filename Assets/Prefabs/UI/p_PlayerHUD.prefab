@@ -135,7 +135,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -205,8 +205,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 400, y: 40}
+  m_AnchoredPosition: {x: 17.265614, y: -20}
+  m_SizeDelta: {x: 434.5312, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6291910847686323379
 CanvasRenderer:
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -339,7 +339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -19.4878}
+  m_AnchoredPosition: {x: 100, y: 19.488}
   m_SizeDelta: {x: 200, y: 38.9756}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8166679307280306652
@@ -407,8 +407,8 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
+  m_characterSpacing: 5
+  m_wordSpacing: 20
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -577,8 +577,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.12, y: -88.574}
-  m_SizeDelta: {x: 402.2374, y: 99.1959}
+  m_AnchoredPosition: {x: 231.62259, y: -49.598}
+  m_SizeDelta: {x: 463.2426, y: 99.1959}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4734498506348030866
 CanvasRenderer:
@@ -654,9 +654,9 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_characterSpacing: 5
+  m_wordSpacing: 3
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
