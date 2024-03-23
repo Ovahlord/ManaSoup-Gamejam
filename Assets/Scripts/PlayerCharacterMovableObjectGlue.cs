@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class PlayerCharacterMovableObjectGlue : MonoBehaviour
 {
-    private CharacterController characterController = null;
-
-    private void Awake()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
-
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (transform.parent == hit.transform)
@@ -23,5 +16,7 @@ public class PlayerCharacterMovableObjectGlue : MonoBehaviour
         }
         else
             transform.SetParent(null);
+
+        PlayerCharacterController.ToggleAmplifiedJumping(hit.transform.CompareTag("AmplifyJump"));
     }
 }

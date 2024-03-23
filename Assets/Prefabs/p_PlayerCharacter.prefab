@@ -311,6 +311,7 @@ MonoBehaviour:
   splitChannelParticleSystem: {fileID: -6481991224348210288}
   MaxJumpHeight: 5
   Gravity: 40
+  AmplifiedJumpMultiplier: 1.5
 --- !u!198 &-6481991224348210288
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 1
+  moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0

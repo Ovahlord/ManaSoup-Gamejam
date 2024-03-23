@@ -20,6 +20,7 @@ public class PlayerCharacterController : MonoBehaviour
     [Header("Jump Character Settings")]
     [SerializeField] private float MaxJumpHeight = 5f;
     [SerializeField] private float Gravity = 40f;
+    [SerializeField] private float AmplifiedJumpMultiplier = 1.5f;
 
     private CharacterController activePlayerCharacterController = null;
     private Vector2 moveInputValue = Vector2.zero;
@@ -28,12 +29,17 @@ public class PlayerCharacterController : MonoBehaviour
     private List<GameObject> splittedCharacters = new List<GameObject>();
     private int controlledSplittedCharacterIndex = 0;
     private float? verticalAcceleration = null;
+    static PlayerCharacterController instance = null;
 
     // Grabbing
     private Transform grabbedObject = null;
     private Vector3 previousPosition = Vector3.zero;
     private Vector3 previousGrabObjectPosition = Vector3.zero;
     private Collider[] colliderCache = new Collider[20];
+
+    // Amplified Jumping
+    private bool amplifiedJump = false;
+
 
     private readonly Vector3[] splittingRaycastDirections = { Vector3.left, Vector3.right, Vector3.forward, Vector3.back, new(1f, 0f, 1f), new(-1f, 0f, -1f), new(1f, 0f, -1f), new(-1f, 0f, 1f) };
 
@@ -47,7 +53,11 @@ public class PlayerCharacterController : MonoBehaviour
         PlayerCameraFollower.FollowLerpFactor = cameraFollowLerpFactor;
         PlayerCameraFollower.CameraFacingHeightOffset = cameraFacingHeightOffset;
 
-        previousPosition = transform.position;
+        previousPosition = activePlayerCharacterController.transform.position;
+        if (instance != null && instance != this)
+            Destroy(instance.gameObject);
+
+        instance = this;
     }
 
     // Start is called before the first frame update
@@ -77,17 +87,20 @@ public class PlayerCharacterController : MonoBehaviour
         CollisionFlags flags = activePlayerCharacterController.Move(motion);
         if (flags.HasFlag(CollisionFlags.CollidedBelow))
             verticalAcceleration = null;
-        else if (!verticalAcceleration.HasValue)
-            verticalAcceleration = 0f;
+        else
+        {
+            if (!verticalAcceleration.HasValue)
+                verticalAcceleration = 0f;
+
+            ToggleAmplifiedJumping(false);
+        }
 
         UpdateGrabCollision();
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
-        previousPosition = transform.position;
-        if (grabbedObject != null)
-            previousGrabObjectPosition = grabbedObject.position;
+        UpdatePositionSnapshots();
     }
 
     public void OnMove(InputValue value)
@@ -185,6 +198,8 @@ public class PlayerCharacterController : MonoBehaviour
             return;
 
         verticalAcceleration = Mathf.Sqrt(Gravity * MaxJumpHeight * 2);
+        if (amplifiedJump && activePlayerCharacterController.transform.CompareTag("PlayerJump"))
+            verticalAcceleration *= AmplifiedJumpMultiplier;
     }
 
     public void OnGrab(InputValue value)
@@ -194,10 +209,11 @@ public class PlayerCharacterController : MonoBehaviour
 
         if (grabbedObject == null)
         {
-            if (Physics.Raycast(activePlayerCharacterController.transform.position, activePlayerCharacterController.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo, 0.6f))
+            if (Physics.Raycast(activePlayerCharacterController.transform.position + Vector3.up * 0.2f, activePlayerCharacterController.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo, 0.6f))
             {
                 if (hitInfo.transform.CompareTag("MovableObject"))
                 {
+                    Debug.Log("grabby grap");
                     hitInfo.transform.SetParent(activePlayerCharacterController.transform);
                     grabbedObject = hitInfo.transform;
                     previousGrabObjectPosition = grabbedObject.position;
@@ -213,10 +229,11 @@ public class PlayerCharacterController : MonoBehaviour
         if (grabbedObject == null)
             return;
 
-        transform.position = previousPosition;
-        grabbedObject.position = previousGrabObjectPosition;
         grabbedObject.SetParent(null);
+        grabbedObject.position = previousGrabObjectPosition;
         grabbedObject = null;
+
+        activePlayerCharacterController.Move(previousPosition - activePlayerCharacterController.transform.position);
     }
 
     private void UpdateGrabCollision()
@@ -239,5 +256,28 @@ public class PlayerCharacterController : MonoBehaviour
             ReleaseGrabbedObject();
             break;
         }
+    }
+
+    public static void ToggleAmplifiedJumping(bool enable)
+    {
+        if (instance.amplifiedJump == enable || !instance.activePlayerCharacterController.transform.CompareTag("PlayerJump"))
+            return;
+
+        instance.amplifiedJump = enable;
+        if (instance.activePlayerCharacterController.TryGetComponent(out ParticleSystem particles))
+        {
+            if (enable)
+                particles.Play();
+            else
+                particles.Stop();
+        }
+
+    }
+
+    private void UpdatePositionSnapshots()
+    {
+        previousPosition = activePlayerCharacterController.transform.position;
+        if (grabbedObject != null)
+            previousGrabObjectPosition = grabbedObject.position;
     }
 }
