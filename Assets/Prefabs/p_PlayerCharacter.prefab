@@ -309,6 +309,7 @@ MonoBehaviour:
   requiredPickups: 3
   mainCharacterMaterial: {fileID: 2100000, guid: b9b4653fed1abdb40bd0cbaa9774d672,
     type: 2}
+  jumpSoundEffect: {fileID: 8300000, guid: c01316669818f8444926f76958030f9e, type: 3}
   MaxJumpHeight: 5
   Gravity: 40
   AmplifiedJumpMultiplier: 1.5

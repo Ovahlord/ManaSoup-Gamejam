@@ -17,6 +17,7 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private GameObject playerHudPrefab = null;
     [SerializeField] private int requiredPickups = 3;
     [SerializeField] private Material mainCharacterMaterial = null;
+    [SerializeField] private AudioClip jumpSoundEffect = null;
 
     [Header("Jump Character Settings")]
     [SerializeField] private float MaxJumpHeight = 5f;
@@ -218,6 +219,8 @@ public class PlayerCharacterController : MonoBehaviour
         verticalAcceleration = Mathf.Sqrt(Gravity * MaxJumpHeight * 2);
         if (amplifiedJump && activePlayerCharacterController.transform.CompareTag("PlayerJump"))
             verticalAcceleration *= AmplifiedJumpMultiplier;
+
+        AudioSource.PlayClipAtPoint(jumpSoundEffect, activePlayerCharacterController.transform.position);
     }
 
     public void OnGrab(InputValue value)

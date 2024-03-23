@@ -4,20 +4,11 @@ using UnityEngine;
 
 public class PickupHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private AudioClip popClip = null;
 
     private void OnTriggerEnter(Collider other)
     {
+        AudioSource.PlayClipAtPoint(popClip, transform.position);
         PlayerCharacterController.IncrementPickupNumber();
         Destroy(gameObject);
     }

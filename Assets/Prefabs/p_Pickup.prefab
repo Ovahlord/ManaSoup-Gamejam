@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd215a3b5e1a84469527c62882cda31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popClip: {fileID: 8300000, guid: b666ebcd3c7535449abb116b0bc5f5ef, type: 3}
 --- !u!4 &742365820595206026 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dfed1cdce1e2c5f40a151718650f9b3b,
