@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ConceptScene.unity
-    guid: c647588309f67dd4b9eb9503be93f5a6
+    path: Assets/Scenes/TutorialScene.unity
+    guid: 1dd460446f111c44baea042f809cf06e
+  - enabled: 1
+    path: Assets/Scenes/Block out_Mooncake_ConceptScene 1.unity
+    guid: 5aba0fede7900c246a640b58b545a34e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d976a0aecb5d6264094d4b131c54809f,
       type: 2}
