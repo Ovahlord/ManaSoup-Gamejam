@@ -4987,6 +4987,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popClip: {fileID: 8300000, guid: b666ebcd3c7535449abb116b0bc5f5ef, type: 3}
+  sineOffsetStrength: 0.5
+  sineOffsetFrequency: 1
 --- !u!4 &742365820595206026 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dfed1cdce1e2c5f40a151718650f9b3b,
