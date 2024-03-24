@@ -16,7 +16,21 @@ public class PlayerCharacterMovableObjectGlue : MonoBehaviour
         }
         else
             transform.SetParent(null);
+    }
 
-        PlayerCharacterController.ToggleAmplifiedJumping(hit.transform.CompareTag("AmplifyJump"));
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.transform.CompareTag("AmplifyJump"))
+            return;
+
+        PlayerCharacterController.ToggleAmplifiedJumping(true);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.transform.CompareTag("AmplifyJump"))
+            return;
+
+        PlayerCharacterController.ToggleAmplifiedJumping(true);
     }
 }

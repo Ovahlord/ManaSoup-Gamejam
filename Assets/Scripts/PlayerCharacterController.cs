@@ -31,6 +31,7 @@ public class PlayerCharacterController : MonoBehaviour
     private List<GameObject> splittedCharacters = new List<GameObject>();
     private int controlledSplittedCharacterIndex = 0;
     private float? verticalAcceleration = null;
+    private PlayerInput input = null;
     static PlayerCharacterController instance = null;
 
     // Grabbing
@@ -64,6 +65,7 @@ public class PlayerCharacterController : MonoBehaviour
     private void Awake()
     {
         activePlayerCharacterController = GetComponent<CharacterController>();
+        input = GetComponent<PlayerInput>();
         new GameObject("CameraFollower").AddComponent<PlayerCameraFollower>();
 
         PlayerCameraFollower.Target = transform;
@@ -81,6 +83,7 @@ public class PlayerCharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         Instantiate(playerHudPrefab);
         PlayerHUDManager.SetPickupValues(requiredPickups, GatheredPickups);
     }
@@ -220,7 +223,7 @@ public class PlayerCharacterController : MonoBehaviour
         if (amplifiedJump && activePlayerCharacterController.transform.CompareTag("PlayerJump"))
             verticalAcceleration *= AmplifiedJumpMultiplier;
 
-        AudioSource.PlayClipAtPoint(jumpSoundEffect, activePlayerCharacterController.transform.position);
+        AudioSource.PlayClipAtPoint(jumpSoundEffect, activePlayerCharacterController.transform.position, 10f);
     }
 
     public void OnGrab(InputValue value)
@@ -242,6 +245,20 @@ public class PlayerCharacterController : MonoBehaviour
         }
         else
             ReleaseGrabbedObject();
+    }
+
+    public void OnOpenMenu(InputValue value)
+    {
+        PlayerHUDManager.ToggleMenu(true);
+        input.SwitchCurrentActionMap("UI");
+        Cursor.visible = true;
+    }
+
+    public void OnCloseMenu(InputValue value)
+    {
+        PlayerHUDManager.ToggleMenu(false);
+        input.SwitchCurrentActionMap("Player");
+        Cursor.visible = false;
     }
 
     public void ReleaseGrabbedObject()
