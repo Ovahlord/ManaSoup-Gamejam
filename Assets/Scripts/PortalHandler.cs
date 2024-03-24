@@ -1,20 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PortalHandler : MonoBehaviour
 {
     [SerializeField] private List<GameObject> portalFragments = new List<GameObject>();
     [SerializeField] private List<Material> portalFragmentMaterials = new List<Material>();
     [SerializeField] private Transform portalVisual = null;
+    [SerializeField] private string nextLevelName = "";
 
     private List<GameObject> missingFragments = new List<GameObject>();
     private float? portalGrowthTimer = null;
     private bool toggledEmission = false;
+    private static PortalHandler instance = null;
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+            Destroy(instance);
+
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+
         foreach (Material mat in portalFragmentMaterials)
             mat.DisableKeyword("_EMISSION");
 
@@ -68,5 +81,13 @@ public class PortalHandler : MonoBehaviour
 
         if (missingFragments.Count == 0 && !portalGrowthTimer.HasValue)
             portalGrowthTimer = 2f;
+    }
+
+    public static void PortalEntered()
+    {
+        if (instance.missingFragments.Count > 0 || instance.nextLevelName.Length == 0)
+            return;
+
+        SceneManager.LoadScene(instance.nextLevelName);
     }
 }

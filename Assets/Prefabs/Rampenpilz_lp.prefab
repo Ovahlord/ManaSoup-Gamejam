@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4563775514035693055
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 42.38066
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.3668342
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 32.437546
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5e39d2545464f59469a3765e95dec970, type: 2}
+    - target: {fileID: 919132149155446097, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      propertyPath: m_Name
+      value: Rampenpilz_lp
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c71114b1e07fdf642b568ce6f2f355c3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3661118286946020779}
+  m_SourcePrefab: {fileID: 100100000, guid: c71114b1e07fdf642b568ce6f2f355c3, type: 3}
+--- !u!1 &3716772027742558382 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c71114b1e07fdf642b568ce6f2f355c3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4563775514035693055}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &3661118286946020779
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3716772027742558382}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6014568783371455780, guid: c71114b1e07fdf642b568ce6f2f355c3, type: 3}
