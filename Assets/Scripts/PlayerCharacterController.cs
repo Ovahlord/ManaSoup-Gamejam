@@ -18,6 +18,7 @@ public class PlayerCharacterController : MonoBehaviour
     [SerializeField] private int requiredPickups = 3;
     [SerializeField] private Material mainCharacterMaterial = null;
     [SerializeField] private AudioClip jumpSoundEffect = null;
+    [SerializeField] private Animator animator = null;
 
     [Header("Jump Character Settings")]
     [SerializeField] private float MaxJumpHeight = 5f;
@@ -95,7 +96,10 @@ public class PlayerCharacterController : MonoBehaviour
             activePlayerCharacterController.transform.rotation = Quaternion.Euler(0f, Mathf.MoveTowardsAngle(activePlayerCharacterController.transform.eulerAngles.y, targetBodyRotation, bodyTurnSpeed * Time.deltaTime), 0f);
 
         if (moveInputValue.magnitude == 0f && !verticalAcceleration.HasValue)
+        {
+            animator.SetTrigger("StopWalk");
             return;
+        }
 
         if (verticalAcceleration.HasValue)
         {
@@ -117,6 +121,7 @@ public class PlayerCharacterController : MonoBehaviour
             ToggleAmplifiedJumping(false);
         }
 
+        animator.SetTrigger("StartWalk");
         UpdateGrabCollision();
     }
 
