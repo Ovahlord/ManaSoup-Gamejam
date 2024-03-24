@@ -7390,6 +7390,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: p_PortalFull
       objectReference: {fileID: 0}
+    - target: {fileID: 7422816299532665339, guid: c852e2af21567574bbce3dee1aa416e5,
+        type: 3}
+      propertyPath: nextLevelName
+      value: Level2
+      objectReference: {fileID: 0}
     - target: {fileID: 8652167865582746372, guid: c852e2af21567574bbce3dee1aa416e5,
         type: 3}
       propertyPath: m_LocalPosition.x
